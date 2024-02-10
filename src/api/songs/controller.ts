@@ -16,9 +16,11 @@ export const createSong = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    let input = req.body as SongRequest.ICreateSong;
+
     // Create new song
     const newsong = await Song.createSong(
-      req.body as SongRequest.ICreateSong
+      input
     );
     if (!newsong) {
       throw new AppError("Song already exists", 400);
@@ -223,8 +225,7 @@ export const updateSongById = async (
      // Send response
      res.status(201).json({
       status: "SUCCESS",
-      message: `Song ${song.title} updated successfully`,
-      data: {song}
+      message: `Song updated successfully`,
     });
 
   } catch (error) {

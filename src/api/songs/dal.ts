@@ -6,6 +6,11 @@ export default class Song {
     data: SongRequest.ICreateSong
   ): Promise<SongRequest.ISongDoc | null> {
     try {
+      data.artist = data.artist.toLocaleLowerCase();
+      data.title = data.title.toLocaleLowerCase();
+      data.album = data.album.toLocaleLowerCase();
+      data.genre = data.genre.toLocaleLowerCase();
+
       // check if song already exists using get Song
       const song = await Song.getSong({title: data.title});
       if (song?.length === 0) {
@@ -42,7 +47,7 @@ export default class Song {
    */
   static async getSongById(id: string): Promise<SongRequest.ISongDoc | null> {
     try {
-      const song = await SongModel.findById(id);
+      const song = await SongModel.findOne({index: id});
       if (!song) {
         return null;
       }
@@ -165,17 +170,22 @@ export default class Song {
   static async updateSong(
     id: string,
     data: SongRequest.IgUpdateSong
-  ): Promise<SongRequest.ISongDoc | null> {
+  ): Promise<null | void> {
     try {
-      const song = await SongModel.findByIdAndUpdate(
-        id,
-        {...data},
-        { new: true }
+      data.artist && (data.artist = data.artist.toLocaleLowerCase());
+      data.title && (data.title.toLocaleLowerCase());
+      data.album && (data.album.toLocaleLowerCase());
+      data.genre && (data.genre.toLocaleLowerCase());
+
+      const song = await SongModel.updateOne(
+        {index: id},
+        {$set: {...data}},
       );
+
+
       if (!song) {
         return null;
       }
-      return song;
     } catch (error) {
       throw error;
     }
@@ -189,7 +199,7 @@ export default class Song {
   static async deleteSongById(id: string): Promise<SongRequest.ISongDoc | null> {
     try {
       // delete song
-      const song = await SongModel.findByIdAndDelete(id);
+      const song = await SongModel.findOneAndDelete({index: id});
       if (!song) {
         return null;
       }
