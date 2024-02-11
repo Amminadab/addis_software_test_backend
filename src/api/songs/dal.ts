@@ -172,20 +172,22 @@ export default class Song {
     data: SongRequest.IgUpdateSong
   ): Promise<null | void> {
     try {
+       // check if song already exists using get Song
+       const songExists = await Song.getSong({title: data.title});
+       if (songExists?.length === 0) {
+         return null;
+       }
+
       data.artist && (data.artist = data.artist.toLocaleLowerCase());
       data.title && (data.title.toLocaleLowerCase());
       data.album && (data.album.toLocaleLowerCase());
       data.genre && (data.genre.toLocaleLowerCase());
 
-      const song = await SongModel.updateOne(
+      await SongModel.updateOne(
         {index: id},
         {$set: {...data}},
       );
 
-
-      if (!song) {
-        return null;
-      }
     } catch (error) {
       throw error;
     }
