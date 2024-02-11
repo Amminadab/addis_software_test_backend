@@ -23,7 +23,6 @@ const songSchema = new Schema<SongRequest.ISongDoc>(
     },
     album: {
       type: String,
-      minlength: [1, "Album Name Must Be At Least 1 Characters"],
       trim: true,
     },
     genre: {
