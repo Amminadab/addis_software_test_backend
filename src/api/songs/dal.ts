@@ -1,3 +1,4 @@
+import { UpdateWriteOpResult } from "mongoose";
 import SongModel from "./model";
 
 export default class Song {
@@ -170,11 +171,11 @@ export default class Song {
   static async updateSong(
     id: string,
     data: SongRequest.IgUpdateSong
-  ): Promise<null | void> {
+  ): Promise<null | UpdateWriteOpResult> {
     try {
-       // check if song already exists using get Song
-       const songExists = await Song.getSong({title: data.title});
-       if (songExists?.length === 0) {
+       // check if song already exists using index of Song
+       const songExists = await Song.getSongById(id);
+       if (!songExists) {
          return null;
        }
 
@@ -183,10 +184,13 @@ export default class Song {
       data.album && (data.album.toLocaleLowerCase());
       data.genre && (data.genre.toLocaleLowerCase());
 
-      await SongModel.updateOne(
+      const updatedSong = await SongModel.updateOne(
         {index: id},
         {$set: {...data}},
+        {returnDocument: "after"}
       );
+
+      return updatedSong;
 
     } catch (error) {
       throw error;
