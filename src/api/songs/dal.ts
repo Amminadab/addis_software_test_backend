@@ -14,7 +14,7 @@ export default class Song {
 
       // check if song already exists using get Song
       const song = await Song.getSong({title: data.title});
-      if (song?.length === 0) {
+      if (song?.length !== 0) {
         return null;
       }
 
