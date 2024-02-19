@@ -13,7 +13,6 @@ export const createSongValidation = Joi.object({
       "string.pattern.base": "Artist must contain letters",
     }),
   album: Joi.string(),
-  index: Joi.string().required(),
   genre: Joi.string()
     .required()
     .messages({

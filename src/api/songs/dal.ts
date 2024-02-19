@@ -48,7 +48,7 @@ export default class Song {
    */
   static async getSongById(id: string): Promise<SongRequest.ISongDoc | null> {
     try {
-      const song = await SongModel.findOne({index: id});
+      const song = await SongModel.findById(id);
       if (!song) {
         return null;
       }
@@ -185,7 +185,7 @@ export default class Song {
       data.genre && (data.genre.toLocaleLowerCase());
 
       const updatedSong = await SongModel.updateOne(
-        {index: id},
+        {_id: id},
         {$set: {...data}},
         {returnDocument: "after"}
       );
@@ -205,7 +205,7 @@ export default class Song {
   static async deleteSongById(id: string): Promise<SongRequest.ISongDoc | null> {
     try {
       // delete song
-      const song = await SongModel.findOneAndDelete({index: id});
+      const song = await SongModel.findByIdAndDelete(id);
       if (!song) {
         return null;
       }

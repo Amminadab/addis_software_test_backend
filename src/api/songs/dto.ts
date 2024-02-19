@@ -10,7 +10,6 @@ declare global {
       artist: string;
       album: string;
       genre: string;
-      index: string;
       createdAt: Date;
       updatedAt: Date
     }
@@ -20,7 +19,6 @@ declare global {
       artist: string;
       album: string;
       genre: string;
-      index: string;
     }
 
     interface IgUpdateSong {
