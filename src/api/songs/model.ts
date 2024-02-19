@@ -10,11 +10,6 @@ const songSchema = new Schema<SongRequest.ISongDoc>(
       minlength: [1, "Song title Must Be At Least 1 Characters"],
       trim: true,
     },
-    index: {
-      type: String,
-      unique: true,
-      required: [true, "index is required"],
-    },
     artist: {
       type: String,
       required: [true, "Artist Name is required"],
